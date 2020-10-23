@@ -3,4 +3,4 @@
 
 
 #live demo
-![Alt Text](https://ibb.co/RbWz4WX)
+![Alt Text](demo.gif)
