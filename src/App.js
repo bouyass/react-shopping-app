@@ -19,6 +19,8 @@ class App extends React.Component{
     this.listProducts = this.listProducts.bind()
     this.handleChangeSize = this.handleChangeSize.bind()
     this.handleRemoveFromCart = this.handleRemoveFromCart.bind()
+    this.handleDecrementCount = this.handleDecrementCount.bind()
+    this.handleIncrementCount = this.handleIncrementCount.bind()
   }
 
   handleAddToCard = (e, product) => {
@@ -73,8 +75,49 @@ class App extends React.Component{
     this.listProducts()
   }
 
-  handleRemoveFromCart = () => {
+  handleRemoveFromCart = (e, product) => {
+    const cartItems = this.state.cartItems
+    this.setState(state => {
+        cartItems.map((item, index) => {
+        if(item.id === product.id){
+          state.cartItems.splice(index,1)
+        }
+      })
+      localStorage.setItem('items',JSON.stringify(cartItems))
+      return {cartItems}
+    })
+  }
 
+  handleIncrementCount = (e,product) => {
+    const cartItems = this.state.cartItems
+    this.setState(state => {
+      cartItems.map((item) => {
+      if(item.id === product.id){
+         item.count++
+      }
+    })
+    localStorage.setItem('items',JSON.stringify(cartItems))
+    return {cartItems}
+  })
+  }
+
+  handleDecrementCount = (e,product) => {
+    const cartItems = this.state.cartItems
+    this.setState(state => {
+      cartItems.map((item, index) => {
+        console.log(product)
+      if(item.id === product.id){
+        if(item.count > 0){
+          item.count--
+          if(item.count === 0 ){
+            state.cartItems.splice(index,1)
+          }
+        }
+      }
+    })
+    localStorage.setItem('items',JSON.stringify(cartItems))
+    return {cartItems}
+  })
   }
 
   
@@ -105,7 +148,7 @@ class App extends React.Component{
             
             <div className="secondContainer"> 
             <Products products={this.state.filteredProducts}  handleAddToCard={this.handleAddToCard} />
-            <div><Basket className="basket" cartItems={this.state.cartItems} handleRemoveFromCart={this.handleRemoveFromCart} /></div>
+            <div><Basket className="basket" handleIncrementCount={this.handleIncrementCount}  handleDecrementCount={this.handleDecrementCount} cartItems={this.state.cartItems} handleRemoveFromCart={this.handleRemoveFromCart} /></div>
           </div>
       </div>
       </div>

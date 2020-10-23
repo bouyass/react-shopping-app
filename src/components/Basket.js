@@ -15,7 +15,11 @@ export default class Basket extends Component {
                         {
                             cartItems.map(item => {
                                return  <div className="main"><b>{item.count} {item.title} </b>
-                                            <div className="buttons"><button style={{backgroundColor:'#e48d41'}} >X</button> <button style={{backgroundColor:'#e48d41'}}>+</button><button style={{backgroundColor:'#e48d41'}}>-</button></div>
+                                            <div className="buttons">
+                                                <button style={{backgroundColor:'#e48d41'}} onClick={(e) => this.props.handleRemoveFromCart(e,item)} >X</button>
+                                                <button style={{backgroundColor:'#e48d41'}} onClick={(e) => this.props.handleIncrementCount(e,item)}>+</button>
+                                                <button style={{backgroundColor:'#e48d41'}} onClick={(e) => this.props.handleDecrementCount(e,item)}>-</button>
+                                            </div>
                                         </div>
 
                             })
