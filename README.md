@@ -3,4 +3,5 @@
 
 
 #live demo
-![Alt Text](demo.gif)
+<br/>
+![shopping cart](demo.gif)
