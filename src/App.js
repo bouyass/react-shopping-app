@@ -4,6 +4,8 @@ import './App.css';
 import Products from './components/Products'
 import Filter from './components/Filter'
 import Basket from './components/Basket'
+import { Provider } from 'react-redux';
+import store from './store'
 
 class App extends React.Component{
 
@@ -122,14 +124,7 @@ class App extends React.Component{
 
   
   componentDidMount = () => {
-    fetch('http://localhost:8000/products')
-          .then(response => response.json())
-          .then(data => {
-            this.setState({
-              products: data,
-              filteredProducts: data
-            })
-          })
+    
       this.setState({
         cartItems: JSON.parse(localStorage.getItem('items'))
       })
@@ -137,6 +132,7 @@ class App extends React.Component{
 
   render(){
     return (
+      <Provider store={store}>
       <div className="container">
         <h1 style={{color:'#fff'}}>REACT SHPPING APPLICATION</h1>
         <hr style={{borderTop: '0.5px solid #fff'}} />
@@ -152,6 +148,7 @@ class App extends React.Component{
           </div>
       </div>
       </div>
+      </Provider>
     );
   }
   

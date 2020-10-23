@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
+import {filterProductsBySize, sortItems} from '../acions/ProductActions'
+import {connect} from 'react-redux'
 import './Filter.css'
 
-export default class Filter extends Component {
+class Filter extends Component {
     render() {
         return (
             <div className="row">
@@ -10,7 +12,7 @@ export default class Filter extends Component {
                 </div>
                 <div className="col-md-4">
                    <b> Order by</b>
-                    <select style={{width:'200px'}} onChange={this.props.handleChangeSort} className="form-control" value={this.props.sort} >
+                    <select style={{width:'200px'}} onChange={(e) => {this.props.sortItems(e.target.value, this.props.products)}} className="form-control" value={this.props.sort} >
                             <option value=""> Order </option>
                             <option value="lowest"> Lowest to highest </option>
                             <option value="highest"> Heighest to lowest </option>
@@ -19,9 +21,9 @@ export default class Filter extends Component {
 
                 <div className="col-md-4">
                     <b>Filter size</b>
-                    <select style={{width:'80px'}} onChange={this.props.handleChangeSize}  className="form-control"  value={this.props.size}>
+                    <select style={{width:'80px'}} onChange={(e) => {this.props.filterProductsBySize(e.target.value, this.props.products)}}  className="form-control"  value={this.props.size}>
                         <option value="">Size</option>
-                        <option value="all">ALL</option>
+                        <option value="">ALL</option>
                         <option value="xs">XS</option>
                         <option value="s">S</option>
                         <option value="m">M</option>
@@ -35,3 +37,12 @@ export default class Filter extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => ({
+    products: state.products.items, 
+    filteredProducts: state.products.filteredProducts,
+    size: state.products.size,
+    sort:state.products.sort
+})
+
+export default connect(mapStateToProps,{filterProductsBySize,sortItems})(Filter)

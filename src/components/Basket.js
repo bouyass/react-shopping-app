@@ -1,10 +1,16 @@
 import React, { Component } from 'react'
 import './Basket.css'
+import {removeFromCart, fetchCartItems,reduceQuantity,increaseQuantity} from '../acions/CartActions'
+import { connect } from 'react-redux'
 
-export default class Basket extends Component {
+class Basket extends Component {
+
+    componentDidMount(){
+        this.props.fetchCartItems()
+    }
+
     render() {
         const {cartItems} = this.props
-
 
         return (
             <div style={{minHeight:'20px' , width:'380px'}} className="alert alert-info">
@@ -16,9 +22,9 @@ export default class Basket extends Component {
                             cartItems.map(item => {
                                return  <div className="main"><b>{item.count} {item.title} </b>
                                             <div className="buttons">
-                                                <button style={{backgroundColor:'#e48d41'}} onClick={(e) => this.props.handleRemoveFromCart(e,item)} >X</button>
-                                                <button style={{backgroundColor:'#e48d41'}} onClick={(e) => this.props.handleIncrementCount(e,item)}>+</button>
-                                                <button style={{backgroundColor:'#e48d41'}} onClick={(e) => this.props.handleDecrementCount(e,item)}>-</button>
+                                                <button style={{backgroundColor:'#e48d41'}} onClick={(e) => {this.props.removeFromCart(item, this.props.cartItems)}} >X</button>
+                                                <button style={{backgroundColor:'#e48d41'}} onClick={(e) => this.props.increaseQuantity(item, this.props.cartItems)}>+</button>
+                                                <button style={{backgroundColor:'#e48d41'}} onClick={(e) => this.props.reduceQuantity(item, this.props.cartItems)}>-</button>
                                             </div>
                                         </div>
 
@@ -31,3 +37,7 @@ export default class Basket extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => ({cartItems: state.cart.cartItems})
+
+export default connect(mapStateToProps,{removeFromCart, fetchCartItems,reduceQuantity,increaseQuantity})(Basket)

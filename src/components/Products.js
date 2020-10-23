@@ -1,36 +1,41 @@
-import React, { Component } from 'react'
-import Util from '../Util'
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import util from "../Util";
+import { addToCart } from "../acions/CartActions";
+import { fetchProducts } from "../acions/ProductActions";
+import './Products.css'
 
-export default class Products extends Component {
+class Products extends Component {
+  componentDidMount() {
+    this.props.fetchProducts();
+  }
+  render() {
+    const productItems = this.props.products.map((product) => (
+      <div style={{backgroundColor:'#3b3938' , marginRight:'10px', marginBottom:'10px', color:'#fff'}} className="col-md-4" key={product.id}>
+        <div className="thumbnail text-center">
+          <a style={{textDecoration:'none', color:'#fff'}}
+            href={`#${product.id}`}
+            onClick={(e) => this.props.addToCart(this.props.cartItems, product)}
+          >
+            <img  src={`products/${product.sku}_2.jpg`} alt={product.title} />
+            <p>{product.title}</p>
+          </a>
+          <b>{util.formatCurrency(product.price)}</b>
+          <button
+            className="btn btn-primary"
+            onClick={(e) => this.props.addToCart(this.props.cartItems, product)}
+          >
+            Add to cart
+          </button>
+        </div>
+      </div>
+    ));
 
-    constructor(props){
-        super(props)
-    }
-
-    render() {
-        const productItems = this.props.products.map((product) => (
-          <div style={{backgroundColor:'#fff',marginBottom:'25px', marginLeft:'20px',height:'400px',}} key={product.id} className="col-lg-3" key={product.id}>
-            <div className="thumbnail  text-center">
-              <a style={{textDecoration:'none', color:'#000', fontFamily:"Franklin Gothic Medium", fontSize:'1.2em'}}
-                href={`#${product.id}`}
-                onClick={(e) => this.props.addToCart(this.props.cartItems, product)}
-              >
-                <img style={{width:'100%', height:'30%', maxHeight:'250px'}} src={`products/${product.sku}_2.jpg`} alt={product.title} />
-                <p>{product.title}</p>
-              </a>
-
-            <b style={{color:'#000'}}>  {Util.formatCurrency(product.price)} </b>&nbsp;&nbsp;
-            <button style={{marginTop:'0%'}} className="btn btn-dark"
-                onClick={(e) => this.props.handleAddToCard(e, product)}
-            >
-                Add to cart
-            </button>
-             
-            </div>
-          </div>
-        ));
-    
-        return <div className="row">{productItems}</div>;
-      }
+    return <div className="row">{productItems}</div>;
+  }
 }
-
+const mapStateToProps = (state) => ({
+  products: state.products.filteredItems,
+  cartItems: state.cart.cartItems,
+});
+export default connect(mapStateToProps, { fetchProducts, addToCart })(Products);
